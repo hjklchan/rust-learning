@@ -149,7 +149,7 @@ fn example06() {
             write!(
                 f,
                 "AppError {{ code: {}, message: {} }}",
-                self.code, self.message
+                   self.code, self.message
             )
         }
     }
