@@ -12,7 +12,7 @@ fn main() {
     // to_owned_example();
     // deref_example();
     // drop_example();
-    from_and_into_example();
+    // from_and_into_example();
 }
 
 /// **Default** Trait 默认
@@ -338,4 +338,11 @@ pub fn from_and_into_example() {
     let p3: Point = (11, 13).into();
     let p4: Point = (2, 4).into();
     println!("{:?} {:?}", p3, p4);
+}
+
+/// **TryFrom** 和 **TryInto** Trait 都是用于类型转换
+/// 相比于 From 和 Into, TryXxx 是可失败的, 都会返回 Result
+#[allow(unused)]
+pub fn try_from_and_try_into_example() {
+    ()
 }
