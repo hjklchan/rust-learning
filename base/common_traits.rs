@@ -369,5 +369,17 @@ pub fn from_str_example() {
 /// `**deref()` 是隐式调用的, 而 `as_ref()` 需要显示的调用 `**`
 #[allow(unused)]
 fn as_ref_example() {
-    ()
+    struct Point {
+        x: i32, y: i32,
+    }
+    // 为 Point 实现 `AsRef<T>` 特征
+    impl AsRef<str> for Point {
+        fn as_ref(&self) -> &str {
+            "这是一个 Point 结构体"
+        }
+    }
+    // use cases
+    let p: Point = Point { x: 12, y: 32 };
+    let s = p.as_ref();
+    println!("{}", s);
 }
