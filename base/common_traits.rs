@@ -13,7 +13,8 @@ fn main() {
     // deref_example();
     // drop_example();
     // from_and_into_example();
-    from_str_example();
+    // from_str_example();
+    as_ref_example();
 }
 
 /// **Default** Trait 默认
@@ -361,4 +362,12 @@ pub fn try_from_and_try_into_example() {
 #[allow(unused)]
 pub fn from_str_example() {
     todo!()
+}
+
+/// **AsRef** Trait 用于把自身引用转换为目标类型的引用
+/// ## 和 Deref 的区别
+/// `**deref()` 是隐式调用的, 而 `as_ref()` 需要显示的调用 `**`
+#[allow(unused)]
+fn as_ref_example() {
+    ()
 }
