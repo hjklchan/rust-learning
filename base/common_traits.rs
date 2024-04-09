@@ -246,5 +246,7 @@ pub fn copy_example() {
     println!("before: {p1:#?}");
     println!("before: {p2:#?}");
 
-    // TODO: 待补充
+    /// Copy Trait 只赋值固定尺寸的值
+    // ? 为什么 Point 结构体里的字段都是固定尺寸的 (即复制语义), 那为什么不默认实现 Copy 呢?
+    // > 因为 Rust 故意设计的, 在所有权的设计下, Rust 默认选择 Move 语义 (即所有权转移)
 }
