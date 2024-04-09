@@ -13,6 +13,7 @@ fn main() {
     // deref_example();
     // drop_example();
     // from_and_into_example();
+    from_str_example();
 }
 
 /// **Default** Trait 默认
@@ -345,4 +346,19 @@ pub fn from_and_into_example() {
 #[allow(unused)]
 pub fn try_from_and_try_into_example() {
     ()
+}
+
+/// **FromStr** 用于从字符串类型转换到自身
+///
+/// ## FromStr Trait 标准库源码
+/// ```
+/// trait FromStr {
+///     type Err;
+///     fn from_str(s: &str) -> Result<Self, Self::Err>;
+/// }
+/// ```
+/// 该 Trait 就是字符串 `parse()` 背后的 Trait
+#[allow(unused)]
+pub fn from_str_example() {
+    todo!()
 }
