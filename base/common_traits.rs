@@ -10,7 +10,9 @@ fn main() {
     // clone_example();
     // copy_example();
     // to_owned_example();
-    deref_example();
+    // deref_example();
+    // drop_example();
+    from_and_into_example();
 }
 
 /// **Default** Trait 默认
@@ -271,4 +273,69 @@ pub fn to_owned_example() {
 #[allow(unused)]
 fn deref_example() {
     ()
+}
+
+/// **Drop** Trait 用于为类型值做自定义垃圾清理
+/// 实现了这个 Trait 的类型实例在走出作用域时会触发 drop() 方法, 该调用发生在实例被摧毁之前
+#[allow(unused)]
+pub fn drop_example() {
+    struct Point;
+    // 为 Point 结构体实现 Drop Trait
+    impl Drop for Point {
+        fn drop(&mut self) {
+            println!("Currently struct will be destroyed");
+        }
+    }
+}
+
+/// **From** 和 **Into** Trait 都是用于类型转换
+/// - `From<T>` 用于将类型 T 转为自己
+/// - `Into<T>` 用于将自己转为类型 T
+///
+/// ### 这两个 Trait 是互逆的
+/// 实际上只要实现了 `From<T>` 就会自动实现 `Into<T>`, 看下面标准库实现:
+/// ```
+/// impl Into for Trait
+/// where U: From,
+/// {
+///     fn into(self) -> U {
+///         U::from(self)
+///     }
+/// }
+///
+/// ```
+#[allow(unused)]
+pub fn from_and_into_example() {
+    #[derive(Debug)]
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+    // 为 Point 实现 `From<(i32, i32)>` 特征 (将元组转换为 Point 实例)
+    impl From<(i32, i32)> for Point {
+        fn from(value: (i32, i32)) -> Self {
+            Self {
+                x: value.0,
+                y: value.1,
+            }
+        }
+    }
+    // 为 Point 实现 `From<[i32; 2]>` 特征 (将数组转换为 Point 实例)
+    impl From<[i32; 2]> for Point {
+        fn from(value: [i32; 2]) -> Self {
+            Self {
+                x: value[0],
+                y: value[1],
+            }
+        }
+    }
+    // use cases
+    // 使用 from() 支持不同类型的转换
+    let p1 = Point::from((10, 12));
+    let p2 = Point::from([1, 2]);
+    println!("{:?} {:?}", p1, p2);
+    // 使用 into() 支持不同类型的转换
+    let p3: Point = (11, 13).into();
+    let p4: Point = (2, 4).into();
+    println!("{:?} {:?}", p3, p4);
 }
