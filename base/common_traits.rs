@@ -8,7 +8,9 @@ fn main() {
     // partial_eq_and_eq_example();
     // add_example()
     // clone_example();
-    copy_example();
+    // copy_example();
+    // to_owned_example();
+    deref_example();
 }
 
 /// **Default** Trait 默认
@@ -249,4 +251,24 @@ pub fn copy_example() {
     /// Copy Trait 只赋值固定尺寸的值
     // ? 为什么 Point 结构体里的字段都是固定尺寸的 (即复制语义), 那为什么不默认实现 Copy 呢?
     // > 因为 Rust 故意设计的, 在所有权的设计下, Rust 默认选择 Move 语义 (即所有权转移)
+}
+
+/// **ToOwned** Trait 为类型提供 to_owned() 方法, 可以将引用转换为所有权示例
+#[allow(unused)]
+pub fn to_owned_example() {
+    let a: &str = "hjkl1!";
+    let o: String = a.to_owned();
+    println!("{}", o);
+}
+
+/// **Deref** Trait 用于将一个类型转换为另一个类型,
+/// 但需要在引用符号 `&` 和点 `.` 操作符
+///
+/// ****
+/// 比如标准库里常见的 `&String` 可以自动转换为 `&str`, 因为 String 实现了 Deref Trait  
+/// 还有 `&Vec<T>` 转换成 `&[T]`
+///
+#[allow(unused)]
+fn deref_example() {
+    ()
 }
