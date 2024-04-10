@@ -8,7 +8,13 @@ fn main() {
     // partial_eq_and_eq_example();
     // add_example()
     // clone_example();
-    copy_example();
+    // copy_example();
+    // to_owned_example();
+    // deref_example();
+    // drop_example();
+    // from_and_into_example();
+    // from_str_example();
+    as_ref_example();
 }
 
 /// **Default** Trait 默认
@@ -246,5 +252,134 @@ pub fn copy_example() {
     println!("before: {p1:#?}");
     println!("before: {p2:#?}");
 
-    // TODO: 待补充
+    /// Copy Trait 只赋值固定尺寸的值
+    // ? 为什么 Point 结构体里的字段都是固定尺寸的 (即复制语义), 那为什么不默认实现 Copy 呢?
+    // > 因为 Rust 故意设计的, 在所有权的设计下, Rust 默认选择 Move 语义 (即所有权转移)
+}
+
+/// **ToOwned** Trait 为类型提供 to_owned() 方法, 可以将引用转换为所有权示例
+#[allow(unused)]
+pub fn to_owned_example() {
+    let a: &str = "hjkl1!";
+    let o: String = a.to_owned();
+    println!("{}", o);
+}
+
+/// **Deref** Trait 用于将一个类型转换为另一个类型,
+/// 但需要在引用符号 `&` 和点 `.` 操作符或其他智能指针的触发下才产生转换
+///
+/// ****
+/// 比如标准库里常见的 `&String` 可以自动转换为 `&str`, 因为 String 实现了 Deref Trait  
+/// 还有 `&Vec<T>` 转换成 `&[T]`
+///
+#[allow(unused)]
+fn deref_example() {
+    ()
+}
+
+/// **Drop** Trait 用于为类型值做自定义垃圾清理
+/// 实现了这个 Trait 的类型实例在走出作用域时会触发 drop() 方法, 该调用发生在实例被摧毁之前
+#[allow(unused)]
+pub fn drop_example() {
+    struct Point;
+    // 为 Point 结构体实现 Drop Trait
+    impl Drop for Point {
+        fn drop(&mut self) {
+            println!("Currently struct will be destroyed");
+        }
+    }
+}
+
+/// **From** 和 **Into** Trait 都是用于类型转换
+/// - `From<T>` 用于将类型 T 转为自己
+/// - `Into<T>` 用于将自己转为类型 T
+///
+/// ### 这两个 Trait 是互逆的
+/// 实际上只要实现了 `From<T>` 就会自动实现 `Into<T>`, 看下面标准库实现:
+/// ```
+/// impl Into for Trait
+/// where U: From,
+/// {
+///     fn into(self) -> U {
+///         U::from(self)
+///     }
+/// }
+///
+/// ```
+#[allow(unused)]
+pub fn from_and_into_example() {
+    #[derive(Debug)]
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+    // 为 Point 实现 `From<(i32, i32)>` 特征 (将元组转换为 Point 实例)
+    impl From<(i32, i32)> for Point {
+        fn from(value: (i32, i32)) -> Self {
+            Self {
+                x: value.0,
+                y: value.1,
+            }
+        }
+    }
+    // 为 Point 实现 `From<[i32; 2]>` 特征 (将数组转换为 Point 实例)
+    impl From<[i32; 2]> for Point {
+        fn from(value: [i32; 2]) -> Self {
+            Self {
+                x: value[0],
+                y: value[1],
+            }
+        }
+    }
+    // use cases
+    // 使用 from() 支持不同类型的转换
+    let p1 = Point::from((10, 12));
+    let p2 = Point::from([1, 2]);
+    println!("{:?} {:?}", p1, p2);
+    // 使用 into() 支持不同类型的转换
+    let p3: Point = (11, 13).into();
+    let p4: Point = (2, 4).into();
+    println!("{:?} {:?}", p3, p4);
+}
+
+/// **TryFrom** 和 **TryInto** Trait 都是用于类型转换
+/// 相比于 From 和 Into, TryXxx 是可失败的, 都会返回 Result
+#[allow(unused)]
+pub fn try_from_and_try_into_example() {
+    ()
+}
+
+/// **FromStr** 用于从字符串类型转换到自身
+///
+/// ## FromStr Trait 标准库源码
+/// ```
+/// trait FromStr {
+///     type Err;
+///     fn from_str(s: &str) -> Result<Self, Self::Err>;
+/// }
+/// ```
+/// 该 Trait 就是字符串 `parse()` 背后的 Trait
+#[allow(unused)]
+pub fn from_str_example() {
+    todo!()
+}
+
+/// **AsRef** Trait 用于把自身引用转换为目标类型的引用
+/// ## 和 Deref 的区别
+/// `**deref()` 是隐式调用的, 而 `as_ref()` 需要显示的调用 `**`
+#[allow(unused)]
+fn as_ref_example() {
+    struct Point {
+        x: i32, y: i32,
+    }
+    // 为 Point 实现 `AsRef<T>` 特征
+    impl AsRef<str> for Point {
+        fn as_ref(&self) -> &str {
+            "这是一个 Point 结构体"
+        }
+    }
+    // use cases
+    let p: Point = Point { x: 12, y: 32 };
+    let s = p.as_ref();
+    println!("{}", s);
 }
